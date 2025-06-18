@@ -1,6 +1,7 @@
 import sys             #exit function
 import json
  
+teacherids=[]
 studentids=[]
 students={}
 id_count=0
@@ -9,20 +10,18 @@ id_count=0
 def createaccount():
     global id_count
     name=input("\nEnter your Name: ")
-    studentid=input("Enter your Teacher ID: ")
-    if studentid in studentids:
+    teacherid=input("Enter your Teacher ID: ")
+    if teacherid in teacherids:
         print("Teacher ID already exists! Try logging in.")
     else:
-        studentids.append(studentid)
+        teacherids.append(teacherid)
         id_count += 1
         print("\nAccount created successfully for", name)
-        print("\n----Login Now------\n")
-        login()
 
 #login function
 def login():
-    studentid = input("Enter your Teacher ID: ")
-    if studentid in studentids:
+    teacherid = input("Enter your Teacher ID: ")
+    if teacherid in teacherids:
         print("Login successful!")
         return True
     else:
@@ -66,7 +65,7 @@ def gradecal():
         if not marks:
             continue
         avg = sum(marks)/len(marks)
-        data["average"] =avg
+        data["average"] = avg
 
         if avg >= 90:
             data["grade"] = "A+"
@@ -98,7 +97,7 @@ def displayrecords():
 def searchrecord():
     studentid=input("Enter Student ID: ")
     if studentid not in students:
-        print("\nSuch student id doesnt exit.")
+        print("\nSuch student id doesnt exist.")
         return
     else:
         data = students[studentid]
@@ -106,7 +105,6 @@ def searchrecord():
         print(f"Marks: {data['marks']}")
         print(f"Average: {data['average']}")
         print(f"Grade: {data['grade']}")
-    
     
 #delete a student record function
 def deleterecord():
@@ -144,7 +142,13 @@ while True:
     print("2-Create Account")
     print("3-Exit")
 
-    choice = int(input("\nEnter option: "))
+    choice = input("\nEnter option: ")
+    try:
+        choice = int(choice)
+    except ValueError:
+        print("Invalid choice")
+        continue
+
     match choice:
         case 1:
             if login():
@@ -159,7 +163,13 @@ while True:
                     print("8-Save and Load Data")
                     print("9-Logout")
 
-                    choice2 = int(input("\nEnter option: "))
+                    choice2 = input("\nEnter option: ")
+                    try:
+                        choice2 = int(choice2)
+                    except ValueError:
+                        print("\nInvalid option")
+                        continue
+
                     match choice2:
                         case 1:
                             addrecord()
@@ -169,6 +179,7 @@ while True:
                             gradecal()
                         case 4:
                             displayrecords()
+
                         case 5:
                             searchrecord()
                         case 6:
@@ -180,8 +191,9 @@ while True:
                         case 9:
                             print("\nLogging out...")
                             break
-                        case _:
+                        case _:                    
                             print("\nInvalid option")
+
         case 2:
             createaccount()
         case 3:
